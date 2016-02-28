@@ -38,8 +38,9 @@ def query_mantika(title):
     payload = {'title': title}
 
     r = requests.post('http://ec2-54-86-131-70.compute-1.amazonaws.com:8080/prediction', data=json.dumps(payload), headers={'content-type': 'application/json'})
-    if r.status_code != 200:
-        return ''
+    if r.status_code != 200 or not r.json()['scores']:
+        print 'Mantika error or empty scores for title %s' % title
+        return 'NULL'
     return r.json()['scores'][0]['id']
 
 def get_dynamo_items(category):
